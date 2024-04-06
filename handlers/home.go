@@ -1,9 +1,9 @@
-package handler
+package handlers
 
 import (
 	"github.com/labstack/echo/v4"
 
-	"github.com/tommaso-merlini/go-templ-base-template/view/home"
+	"github.com/tommaso-merlini/go-templ-base-template/views/home"
 )
 
 func HomeShow(c echo.Context) error {

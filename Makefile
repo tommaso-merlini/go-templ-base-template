@@ -12,7 +12,7 @@ install:
 	@npx tailwindcss init -p
 
 build:
-	npx tailwindcss -i view/css/app.css -o public/styles.css 
+	npx tailwindcss -i views/css/app.css -o public/styles.css 
 	@templ generate view
 	@go build -o bin/app main.go 
 

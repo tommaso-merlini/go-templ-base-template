@@ -1,10 +1,11 @@
-package handler
+package handlers
 
 import (
 	"log/slog"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+
 	"github.com/tommaso-merlini/go-templ-base-template/shared"
 )
 
