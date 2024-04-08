@@ -25,7 +25,7 @@ func render(c echo.Context, component templ.Component) error {
 }
 
 func getAuthUser(c echo.Context) (shared.AuthUser, bool) {
-	u, ok := c.Get("user").(shared.AuthUser)
+	u, ok := c.Get(sessionUserKey).(shared.AuthUser)
 	if !ok {
 		return shared.AuthUser{}, false
 	}
