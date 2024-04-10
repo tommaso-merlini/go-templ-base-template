@@ -12,11 +12,6 @@ import (
 	"github.com/tommaso-merlini/go-templ-base-template/shared"
 )
 
-const (
-	sessionUserKey        = "user"
-	sessionAccessTokenKey = "accessToken"
-)
-
 func WithAuthUser(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if strings.Contains(c.Request().URL.Path, "/public") ||
@@ -25,18 +20,17 @@ func WithAuthUser(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		accessToken, err := getAccessToken(c)
 		if err != nil {
-			c.Set(sessionUserKey, shared.AuthUser{})
+			c.Set(shared.SessionUserKey, shared.AuthUser{})
 			return next(c)
 		}
-		_ = accessToken
 		resp, err := auth.Client.Auth.User(c.Request().Context(), accessToken)
 		if err != nil {
-			c.Set(sessionUserKey, shared.AuthUser{})
+			c.Set(shared.SessionUserKey, shared.AuthUser{})
 			return next(c)
 		}
 		dbUser, err := queries.GetUserByAuthID(c.Request().Context(), resp.ID)
 		if err != nil {
-			c.Set(sessionUserKey, shared.AuthUser{})
+			c.Set(shared.SessionUserKey, shared.AuthUser{})
 			return next(c)
 		}
 		user := shared.AuthUser{
@@ -47,18 +41,18 @@ func WithAuthUser(next echo.HandlerFunc) echo.HandlerFunc {
 			CreatedAt:  dbUser.CreatedAt,
 			IsLoggedIn: true,
 		}
-		c.Set(sessionUserKey, user)
+		c.Set(shared.SessionUserKey, user)
 		return next(c)
 	}
 }
 
 func getAccessToken(c echo.Context) (string, error) {
 	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
-	session, err := store.Get(c.Request(), sessionUserKey)
+	session, err := store.Get(c.Request(), shared.SessionUserKey)
 	if err != nil {
 		return "", err
 	}
-	accessToken := session.Values[sessionAccessTokenKey]
+	accessToken := session.Values[shared.SessionAccessTokenKey]
 	if accessToken == nil {
 		return "", nil
 	}

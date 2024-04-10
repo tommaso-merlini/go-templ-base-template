@@ -4,6 +4,11 @@ import (
 	"time"
 )
 
+const (
+	SessionUserKey        = "user"
+	SessionAccessTokenKey = "accessToken"
+)
+
 type AuthUser struct {
 	ID         string
 	AuthID     string

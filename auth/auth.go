@@ -4,7 +4,10 @@ import (
 	"context"
 	"os"
 
+	"github.com/labstack/echo/v4"
 	"github.com/nedpals/supabase-go"
+
+	"github.com/tommaso-merlini/go-templ-base-template/shared"
 )
 
 const BaseAuthURL = "https://bvutljexdthpferjwsgz.supabase.co/auth/v1/recover"
@@ -43,4 +46,12 @@ func Signup(ctx context.Context, email, password string) (*supabase.Authenticate
 		return nil, err
 	}
 	return authUser, err
+}
+
+func GetUser(c echo.Context) (shared.AuthUser, bool) {
+	u, ok := c.Get(shared.SessionUserKey).(shared.AuthUser)
+	if !ok {
+		return shared.AuthUser{}, false
+	}
+	return u, u.IsLoggedIn
 }
