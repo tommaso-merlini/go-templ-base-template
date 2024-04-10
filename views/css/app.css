@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    @apply font-work-sans;
+    /* @apply font-averia; */
+}
+
+html{
+    max-width: 100%;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
